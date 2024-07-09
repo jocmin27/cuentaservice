@@ -6,6 +6,7 @@ import com.example.accountservice.model.ClienteDTO;
 import com.example.accountservice.repository.AccountRepository;
 import com.example.accountservice.repository.MovementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,9 +24,12 @@ public class ReportService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${api.uri.clientes}")
+    private String apiUrl;
+
     public List<Account> getEstadoCuenta(Long clienteId, LocalDate startDate, LocalDate endDate) {
 
-        ClienteDTO cliente = restTemplate.getForObject("http://localhost:8080/clientes/" + clienteId, ClienteDTO.class);
+        ClienteDTO cliente = restTemplate.getForObject(apiUrl + clienteId, ClienteDTO.class);
 
         if (cliente == null) {
             throw new RuntimeException("Cliente no encontrado");
